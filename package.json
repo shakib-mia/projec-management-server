@@ -8,11 +8,21 @@
     "start": "node index.js",
     "start-dev": "nodemon index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shakib-mia/projec-management-server.git"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shakib-mia/projec-management-server/issues"
+  },
+  "homepage": "https://github.com/shakib-mia/projec-management-server#readme",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.18.2"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongodb": "^4.13.0"
   }
 }

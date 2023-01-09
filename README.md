@@ -1,1 +1,0 @@
-# projec-management-server
