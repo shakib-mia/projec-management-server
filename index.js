@@ -39,29 +39,29 @@ async function run() {
             const data = {
                 title, smallDesc, liveSite, codeLink, backendLink, email
             }
-            
-            if(email === "smdshakibmia2001@gmail.com") {
+
+            if (email === "smdshakibmia2001@gmail.com") {
                 if (title && smallDesc && liveSite && codeLink && backendLink) {
-                    if(exist.length) {
+                    if (exist.length) {
                         res.send({ message: "Site Already exists" })
                     } else {
                         const cursor = await collection.insertOne(data);
                         // const response = cursor.toArray();
                         res.send({ status: 200, message: "Adding the Site" })
                     }
-                    
+
                 } else {
                     res.send({ statusCode: 204, message: "No field can be empty" })
                 }
             } else {
                 res.status(401);
-                res.send({message: "Unauthorized"})
+                res.send({ message: "Unauthorized" })
             }
         })
 
         app.delete("/projects/:id", async (req, res) => {
             // console.log(req.params.id === "63be6cd19ecbbf65d6f9b07c");
-            const query = { 
+            const query = {
                 _id: new ObjectId(req.params.id)
             }
             const cursor = await collection.deleteOne(query)
