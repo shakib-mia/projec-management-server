@@ -26,7 +26,7 @@ async function run() {
         });
 
         app.post("/projects", async (req, res) => {
-            const { title, smallDesc, liveSite, codeLink, backendLink, email } = req.body;
+            const { title, smallDesc, liveSite, frontCode, hasBackendLink, backendLink, email, primaryImage, secondaryImage, tertiaryImage } = req.body;
 
             const query = {
                 title: title,
@@ -37,21 +37,36 @@ async function run() {
 
 
             const data = {
-                title, smallDesc, liveSite, codeLink, backendLink, email
+                title, smallDesc, liveSite, frontCode, backendLink, email, primaryImage, secondaryImage, tertiaryImage
             }
 
             if (email === "smdshakibmia2001@gmail.com") {
-                if (title && smallDesc && liveSite && codeLink && backendLink) {
-                    if (exist.length) {
-                        res.send({ message: "Site Already exists" })
+                if(hasBackendLink) {
+                    if (title && smallDesc && liveSite && frontCode && backendLink) {
+                        if (exist.length) {
+                            res.send({ message: "Site Already exists" })
+                        } else {
+                            const cursor = await collection.insertOne(data);
+                            // const response = cursor.toArray();
+                            res.send({ status: 200, message: "Adding the Site" })
+                        }
+    
                     } else {
-                        const cursor = await collection.insertOne(data);
-                        // const response = cursor.toArray();
-                        res.send({ status: 200, message: "Adding the Site" })
+                        res.send({ statusCode: 204, message: "No field can be empty" })
                     }
-
                 } else {
-                    res.send({ statusCode: 204, message: "No field can be empty" })
+                    if (title && smallDesc && liveSite && frontCode) {
+                        if (exist.length) {
+                            res.send({ message: "Site Already exists" })
+                        } else {
+                            const cursor = await collection.insertOne(data);
+                            // const response = cursor.toArray();
+                            res.send({ status: 200, message: "Adding the Site" })
+                        }
+    
+                    } else {
+                        res.send({ statusCode: 204, message: "No field can be empty" })
+                    }
                 }
             } else {
                 res.status(401);
