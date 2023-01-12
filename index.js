@@ -92,6 +92,6 @@ async function run() {
 run().catch(console.dir)
 
 
-app.get("/", (req, res) => res.send({ message: "Welcome to project management" }));
+app.get("/", (req, res) => res.send({ message: "Welcome to Project Management Server" }));
 
 app.listen(port, () => console.log("listening", port))
