@@ -25,6 +25,15 @@ async function run() {
             res.send(projects)
         });
 
+        app.get("/projects/:_id", async (req, res) => {
+            const query = { 
+                _id: new ObjectId(req.params._id) 
+            };
+            const cursor = await collection.find(query);
+            const projects = await cursor.toArray();
+            res.send(projects);
+        });
+
         app.post("/projects", async (req, res) => {
             const { title, smallDesc, liveSite, frontCode, hasBackendLink, backendLink, email, primaryImage, secondaryImage, tertiaryImage } = req.body;
 
@@ -41,7 +50,7 @@ async function run() {
             }
 
             if (email === "smdshakibmia2001@gmail.com") {
-                if(hasBackendLink) {
+                if (hasBackendLink) {
                     if (title && smallDesc && liveSite && frontCode && backendLink) {
                         if (exist.length) {
                             res.send({ message: "Site Already exists" })
@@ -50,7 +59,7 @@ async function run() {
                             // const response = cursor.toArray();
                             res.send({ status: 200, message: "Adding the Site" })
                         }
-    
+
                     } else {
                         res.send({ statusCode: 204, message: "No field can be empty" })
                     }
@@ -63,7 +72,7 @@ async function run() {
                             // const response = cursor.toArray();
                             res.send({ status: 200, message: "Adding the Site" })
                         }
-    
+
                     } else {
                         res.send({ statusCode: 204, message: "No field can be empty" })
                     }
