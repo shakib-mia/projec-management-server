@@ -61,7 +61,7 @@ async function run() {
                         }
 
                     } else {
-                        res.send({ statusCode: 204, message: "No field can be empty" })
+                        res.send({ status: 204, message: "No field can be empty" })
                     }
                 } else {
                     if (title && smallDesc && liveSite && frontCode) {
@@ -74,7 +74,7 @@ async function run() {
                         }
 
                     } else {
-                        res.send({ statusCode: 204, message: "No field can be empty" })
+                        res.send({ status: 204, message: "No field can be empty" })
                     }
                 }
             } else {
