@@ -26,8 +26,8 @@ async function run() {
         });
 
         app.get("/projects/:_id", async (req, res) => {
-            const query = { 
-                _id: new ObjectId(req.params._id) 
+            const query = {
+                _id: new ObjectId(req.params._id)
             };
             const cursor = await collection.find(query);
             const projects = await cursor.toArray();
@@ -83,15 +83,39 @@ async function run() {
             }
         })
 
+        app.put("/projects/:_id", async (req, res) => {
+            const {field, updatedDoc} = req.body;
+            const query = { 
+                _id: new ObjectId(req.params._id)
+            }
+
+            const updatedDocument = {
+                $set: {
+                    [field]: updatedDoc
+                }
+            }
+
+            const cursor = await collection.updateOne(query, updatedDocument);
+            if(cursor.modifiedCount) {
+                // res.send(cursor);
+                const newArr = [];
+                const upperCase = /([A-Z])/g;
+                const arr = field.split("");
+                arr.map(item => newArr.push(upperCase.test(item)))
+
+                if (newArr.indexOf(true) > -1) {
+                    arr.splice(newArr.indexOf(true), 0, " ");
+                    const message = arr.join("") + " updated successfully"
+                    res.send({ message, ...cursor });
+                }
+            }
+        })
+
         app.delete("/projects/:id", async (req, res) => {
-            // console.log(req.params.id === "63be6cd19ecbbf65d6f9b07c");
             const query = {
                 _id: new ObjectId(req.params.id)
             }
-            const cursor = await collection.deleteOne(query)
-            // const response = await cursor.toArray();
-
-            // console.log(cursor);
+            const cursor = await collection.deleteOne(query);
             res.send(cursor)
         })
 
