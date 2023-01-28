@@ -46,46 +46,43 @@ async function run() {
 
 
             const data = {
-                title, smallDesc, liveSite, frontCode, backendLink, email, primaryImage, secondaryImage, tertiaryImage
+                title, smallDesc, liveSite, frontCode, backendLink, primaryImage, secondaryImage, tertiaryImage
             }
 
-            if (email === "smdshakibmia2001@gmail.com") {
-                if (hasBackendLink) {
-                    if (title && smallDesc && liveSite && frontCode && backendLink) {
-                        if (exist.length) {
-                            res.send({ message: "Site Already exists" })
-                        } else {
-                            const cursor = await collection.insertOne(data);
-                            // const response = cursor.toArray();
-                            res.send({ status: 200, message: "Adding the Site" })
-                        }
 
+            if (hasBackendLink) {
+                if (title && smallDesc && liveSite && frontCode && backendLink) {
+                    if (exist.length) {
+                        res.send({ message: "Site Already exists" })
                     } else {
-                        res.send({ status: 204, message: "No field can be empty" })
+                        const cursor = await collection.insertOne(data);
+                        // const response = cursor.toArray();
+                        res.send({ status: 200, message: "Adding the Site" })
                     }
+
                 } else {
-                    if (title && smallDesc && liveSite && frontCode) {
-                        if (exist.length) {
-                            res.send({ message: "Site Already exists" })
-                        } else {
-                            const cursor = await collection.insertOne(data);
-                            // const response = cursor.toArray();
-                            res.send({ status: 200, message: "Adding the Site" })
-                        }
-
-                    } else {
-                        res.send({ status: 204, message: "No field can be empty" })
-                    }
+                    res.send({ status: 204, message: "No field can be empty" })
                 }
             } else {
-                res.status(401);
-                res.send({ message: "Unauthorized" })
+                if (title && smallDesc && liveSite && frontCode) {
+                    if (exist.length) {
+                        res.send({ message: "Site Already exists" })
+                    } else {
+                        const cursor = await collection.insertOne(data);
+                        // const response = cursor.toArray();
+                        res.send({ status: 200, message: "Adding the Site" })
+                    }
+
+                } else {
+                    res.send({ status: 204, message: "No field can be empty" })
+                }
             }
+
         })
 
         app.put("/projects/:_id", async (req, res) => {
-            const {field, updatedDoc} = req.body;
-            const query = { 
+            const { field, updatedDoc } = req.body;
+            const query = {
                 _id: new ObjectId(req.params._id)
             }
 
@@ -96,7 +93,7 @@ async function run() {
             }
 
             const cursor = await collection.updateOne(query, updatedDocument);
-            if(cursor.modifiedCount) {
+            if (cursor.modifiedCount) {
                 // res.send(cursor);
                 const newArr = [];
                 const upperCase = /([A-Z])/g;
