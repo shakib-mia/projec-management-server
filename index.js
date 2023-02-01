@@ -18,14 +18,14 @@ async function run() {
         const collection = client.db("portfolio").collection("projects");
 
 
-        app.get("/", async (req, res) => {
+        app.get("/projects", async (req, res) => {
             const query = {};
             const cursor = collection.find(query);
             const projects = await cursor.toArray();
             res.send(projects)
         });
 
-        app.get("/:_id", async (req, res) => {
+        app.get("/projects/:_id", async (req, res) => {
             const query = {
                 _id: new ObjectId(req.params._id)
             };
@@ -34,7 +34,7 @@ async function run() {
             res.send(projects);
         });
 
-        app.post("/", async (req, res) => {
+        app.post("/projects", async (req, res) => {
             const { title, smallDesc, liveSite, frontCode, hasBackendLink, backendLink, email, primaryImage, secondaryImage, tertiaryImage } = req.body;
 
             const query = {
@@ -80,7 +80,7 @@ async function run() {
 
         })
 
-        app.put("/:_id", async (req, res) => {
+        app.put("/projects/:_id", async (req, res) => {
             const { field, updatedDoc } = req.body;
             const query = {
                 _id: new ObjectId(req.params._id)
@@ -108,7 +108,7 @@ async function run() {
             }
         })
 
-        app.delete("/:id", async (req, res) => {
+        app.delete("/projects/:id", async (req, res) => {
             const query = {
                 _id: new ObjectId(req.params.id)
             }
@@ -122,6 +122,6 @@ async function run() {
 run().catch(console.dir)
 
 
-// app.get("/", (req, res) => res.send({ message: "Welcome to Project Management Server" }));
+app.get("/", (req, res) => res.send({ message: "Welcome to Project Management Server" }));
 
 app.listen(port, () => console.log("listening", port))
