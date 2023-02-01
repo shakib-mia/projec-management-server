@@ -20,7 +20,7 @@ async function run() {
 
         app.get("/projects", async (req, res) => {
             const query = {};
-            const cursor = await collection.find(query);
+            const cursor = collection.find(query);
             const projects = await cursor.toArray();
             res.send(projects)
         });
@@ -29,7 +29,7 @@ async function run() {
             const query = {
                 _id: new ObjectId(req.params._id)
             };
-            const cursor = await collection.find(query);
+            const cursor = collection.find(query);
             const projects = await cursor.toArray();
             res.send(projects);
         });
