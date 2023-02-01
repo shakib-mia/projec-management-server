@@ -18,7 +18,7 @@ async function run() {
         const collection = client.db("portfolio").collection("projects");
 
 
-        app.get("/", async (req, res) => {
+        app.get("/projects", async (req, res) => {
             const query = {};
             const cursor = collection.find(query);
             const projects = await cursor.toArray();
@@ -122,6 +122,6 @@ async function run() {
 run()
 
 
-// app.get("/", (req, res) => res.send({ message: "Welcome to Project Management Server" }));
+app.get("/", (req, res) => res.send({ message: "Welcome to Project Management Server" }));
 
 app.listen(port, () => console.log("listening", port))
