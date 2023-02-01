@@ -114,9 +114,6 @@ app.delete("/projects/:id", async (req, res) => {
 })
 
 
-run().catch(console.dir())
-
-
 app.get("/", (req, res) => res.send({ message: "Welcome to Project Management Server" }));
 
 app.listen(port, () => console.log("listening", port))
