@@ -12,29 +12,29 @@ app.use(express.json());
 const uri = process.env.URL;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-async function run() {
+function run() {
     try {
-        await client.connect();
+        client.connect();
         const collection = client.db("portfolio").collection("projects");
 
 
-        app.get("/projects", async (req, res) => {
+        app.get("/projects", (req, res) => {
             const query = {};
             const cursor = collection.find(query);
-            const projects = await cursor.toArray();
+            const projects = cursor.toArray();
             res.send(projects)
         });
 
-        app.get("/projects/:_id", async (req, res) => {
+        app.get("/projects/:_id", (req, res) => {
             const query = {
                 _id: new ObjectId(req.params._id)
             };
             const cursor = collection.find(query);
-            const projects = await cursor.toArray();
+            const projects = cursor.toArray();
             res.send(projects);
         });
 
-        app.post("/projects", async (req, res) => {
+        app.post("/projects", (req, res) => {
             const { title, smallDesc, liveSite, frontCode, hasBackendLink, backendLink, email, primaryImage, secondaryImage, tertiaryImage } = req.body;
 
             const query = {
@@ -42,7 +42,7 @@ async function run() {
                 liveSite: liveSite
             }
             const cursor = collection.find(query);
-            const exist = await cursor.toArray();
+            const exist = cursor.toArray();
 
 
             const data = {
@@ -55,7 +55,7 @@ async function run() {
                     if (exist.length) {
                         res.send({ message: "Site Already exists" })
                     } else {
-                        const cursor = await collection.insertOne(data);
+                        const cursor = collection.insertOne(data);
                         // const response = cursor.toArray();
                         res.send({ status: 200, message: "Adding the Site" })
                     }
@@ -68,7 +68,7 @@ async function run() {
                     if (exist.length) {
                         res.send({ message: "Site Already exists" })
                     } else {
-                        const cursor = await collection.insertOne(data);
+                        const cursor = collection.insertOne(data);
                         // const response = cursor.toArray();
                         res.send({ status: 200, message: "Adding the Site" })
                     }
@@ -80,7 +80,7 @@ async function run() {
 
         })
 
-        app.put("/projects/:_id", async (req, res) => {
+        app.put("/projects/:_id", (req, res) => {
             const { field, updatedDoc } = req.body;
             const query = {
                 _id: new ObjectId(req.params._id)
@@ -92,7 +92,7 @@ async function run() {
                 }
             }
 
-            const cursor = await collection.updateOne(query, updatedDocument);
+            const cursor = collection.updateOne(query, updatedDocument);
             if (cursor.modifiedCount) {
                 // res.send(cursor);
                 const newArr = [];
@@ -108,11 +108,11 @@ async function run() {
             }
         })
 
-        app.delete("/projects/:id", async (req, res) => {
+        app.delete("/projects/:id", (req, res) => {
             const query = {
                 _id: new ObjectId(req.params.id)
             }
-            const cursor = await collection.deleteOne(query);
+            const cursor = collection.deleteOne(query);
             res.send(cursor)
         })
 
