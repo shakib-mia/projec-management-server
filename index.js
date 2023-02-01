@@ -11,109 +11,108 @@ app.use(express.json());
 
 const client = new MongoClient(process.env.URL, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-async function run() {
-        await client.connect();
-        const collection = client.db("portfolio").collection("projects");
+client.connect();
+const collection = client.db("portfolio").collection("projects");
 
 
-        app.get("/projects", async (req, res) => {
-            const query = {};
-            const cursor = collection.find(query);
-            const projects = await cursor.toArray();
-            res.send(projects)
-        });
+app.get("/projects", async (req, res) => {
+    const query = {};
+    const cursor = collection.find(query);
+    const projects = await cursor.toArray();
+    res.send(projects)
+});
 
-        app.get("/projects/:_id", async (req, res) => {
-            const query = {
-                _id: new ObjectId(req.params._id)
-            };
-            const cursor = collection.find(query);
-            const projects = await cursor.toArray();
-            res.send(projects);
-        });
+app.get("/projects/:_id", async (req, res) => {
+    const query = {
+        _id: new ObjectId(req.params._id)
+    };
+    const cursor = collection.find(query);
+    const projects = await cursor.toArray();
+    res.send(projects);
+});
 
-        app.post("/projects", async (req, res) => {
-            const { title, smallDesc, liveSite, frontCode, hasBackendLink, backendLink, email, primaryImage, secondaryImage, tertiaryImage } = req.body;
+app.post("/projects", async (req, res) => {
+    const { title, smallDesc, liveSite, frontCode, hasBackendLink, backendLink, email, primaryImage, secondaryImage, tertiaryImage } = req.body;
 
-            const query = {
-                title: title,
-                liveSite: liveSite
-            }
-            const cursor = collection.find(query);
-            const exist = await cursor.toArray();
-
-
-            const data = {
-                title, smallDesc, liveSite, frontCode, backendLink, primaryImage, secondaryImage, tertiaryImage
-            }
+    const query = {
+        title: title,
+        liveSite: liveSite
+    }
+    const cursor = collection.find(query);
+    const exist = await cursor.toArray();
 
 
-            if (hasBackendLink) {
-                if (title && smallDesc && liveSite && frontCode && backendLink) {
-                    if (exist.length) {
-                        res.send({ message: "Site Already exists" })
-                    } else {
-                        const cursor = await collection.insertOne(data);
-                        // const response = cursor.toArray();
-                        res.send({ status: 200, message: "Adding the Site" })
-                    }
+    const data = {
+        title, smallDesc, liveSite, frontCode, backendLink, primaryImage, secondaryImage, tertiaryImage
+    }
 
-                } else {
-                    res.send({ status: 204, message: "No field can be empty" })
-                }
+
+    if (hasBackendLink) {
+        if (title && smallDesc && liveSite && frontCode && backendLink) {
+            if (exist.length) {
+                res.send({ message: "Site Already exists" })
             } else {
-                if (title && smallDesc && liveSite && frontCode) {
-                    if (exist.length) {
-                        res.send({ message: "Site Already exists" })
-                    } else {
-                        const cursor = await collection.insertOne(data);
-                        // const response = cursor.toArray();
-                        res.send({ status: 200, message: "Adding the Site" })
-                    }
-
-                } else {
-                    res.send({ status: 204, message: "No field can be empty" })
-                }
+                const cursor = await collection.insertOne(data);
+                // const response = cursor.toArray();
+                res.send({ status: 200, message: "Adding the Site" })
             }
 
-        })
-
-        app.put("/projects/:_id", async (req, res) => {
-            const { field, updatedDoc } = req.body;
-            const query = {
-                _id: new ObjectId(req.params._id)
+        } else {
+            res.send({ status: 204, message: "No field can be empty" })
+        }
+    } else {
+        if (title && smallDesc && liveSite && frontCode) {
+            if (exist.length) {
+                res.send({ message: "Site Already exists" })
+            } else {
+                const cursor = await collection.insertOne(data);
+                // const response = cursor.toArray();
+                res.send({ status: 200, message: "Adding the Site" })
             }
 
-            const updatedDocument = {
-                $set: {
-                    [field]: updatedDoc
-                }
-            }
+        } else {
+            res.send({ status: 204, message: "No field can be empty" })
+        }
+    }
 
-            const cursor = await collection.updateOne(query, updatedDocument);
-            if (cursor.modifiedCount) {
-                // res.send(cursor);
-                const newArr = [];
-                const upperCase = /([A-Z])/g;
-                const arr = field.split("");
-                arr.map(item => newArr.push(upperCase.test(item)))
+})
 
-                if (newArr.indexOf(true) > -1) {
-                    arr.splice(newArr.indexOf(true), 0, " ");
-                    const message = arr.join("") + " updated successfully"
-                    res.send({ message, ...cursor });
-                }
-            }
-        })
+app.put("/projects/:_id", async (req, res) => {
+    const { field, updatedDoc } = req.body;
+    const query = {
+        _id: new ObjectId(req.params._id)
+    }
 
-        app.delete("/projects/:id", async (req, res) => {
-            const query = {
-                _id: new ObjectId(req.params.id)
-            }
-            const cursor = await collection.deleteOne(query);
-            res.send(cursor)
-        })
-}
+    const updatedDocument = {
+        $set: {
+            [field]: updatedDoc
+        }
+    }
+
+    const cursor = await collection.updateOne(query, updatedDocument);
+    if (cursor.modifiedCount) {
+        // res.send(cursor);
+        const newArr = [];
+        const upperCase = /([A-Z])/g;
+        const arr = field.split("");
+        arr.map(item => newArr.push(upperCase.test(item)))
+
+        if (newArr.indexOf(true) > -1) {
+            arr.splice(newArr.indexOf(true), 0, " ");
+            const message = arr.join("") + " updated successfully"
+            res.send({ message, ...cursor });
+        }
+    }
+})
+
+app.delete("/projects/:id", async (req, res) => {
+    const query = {
+        _id: new ObjectId(req.params.id)
+    }
+    const cursor = await collection.deleteOne(query);
+    res.send(cursor)
+})
+
 
 run().catch(console.dir())
 
