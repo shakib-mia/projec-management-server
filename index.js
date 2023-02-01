@@ -12,9 +12,9 @@ app.use(express.json());
 const uri = process.env.URL;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-// async function run() {
-//     try {
-        client.connect();
+async function run() {
+    try {
+        await client.connect();
         const collection = client.db("portfolio").collection("projects");
 
 
@@ -116,8 +116,8 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
             res.send(cursor)
         })
 
-//     } finally { }
-// }
+    } finally { }
+}
 
 run().catch(console.dir)
 
