@@ -15,6 +15,9 @@ client.connect();
 const collection = client.db("portfolio").collection("projects");
 
 
+// to deploy ========>> vercel --prod
+
+
 app.get("/projects", async (req, res) => {
     const query = {};
     const cursor = collection.find(query);
