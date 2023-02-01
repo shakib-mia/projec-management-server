@@ -122,6 +122,6 @@ async function run() {
 run().catch(console.dir)
 
 
-app.get("/api", (req, res) => res.send({ message: "Welcome to Project Management Server" }));
+app.get("/", (req, res) => res.send({ message: "Welcome to Project Management Server" }));
 
 app.listen(port, () => console.log("listening", port))
