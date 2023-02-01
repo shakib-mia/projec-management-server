@@ -119,7 +119,7 @@ async function run() {
     } finally { }
 }
 
-run()
+run().catch(console.dir)
 
 
 app.get("/", (req, res) => res.send({ message: "Welcome to Project Management Server" }));
