@@ -3,17 +3,15 @@ require('dotenv').config()
 const cors = require('cors');
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 
 
 app.use(cors());
 app.use(express.json());
 
-const uri = process.env.URL;
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+const client = new MongoClient(process.env.URL, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run() {
-    try {
         await client.connect();
         const collection = client.db("portfolio").collection("projects");
 
@@ -115,8 +113,6 @@ async function run() {
             const cursor = await collection.deleteOne(query);
             res.send(cursor)
         })
-
-    } finally { }
 }
 
 run().catch(console.dir())
