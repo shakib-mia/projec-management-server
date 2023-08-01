@@ -7,7 +7,6 @@ const port = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
-// console.log();
 
 const client = new MongoClient(process.env.URL, {
   useNewUrlParser: true,
@@ -24,9 +23,7 @@ app.get("/projects", async (req, res) => {
   const query = {};
   const cursor = collection.find(query);
   const projects = await cursor.toArray();
-
-  //   console.log(req.get("host"));
-  res.send({ projects, host: req.get("host") });
+  res.send(projects);
 });
 
 app.get("/projects/:_id", async (req, res) => {
