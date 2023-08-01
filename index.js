@@ -6,6 +6,8 @@ const app = express();
 const port = process.env.PORT || 4000;
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
+// const { error } = require("console");
 
 app.use(cors());
 app.use(express.json());
@@ -152,11 +154,27 @@ app.post("/file", upload.single("file"), (req, res) => {
     return res.status(400).json({ message: "No file received." });
   } else {
     const hostLink = `${req.protocol}://${req.get("host")}`;
-
-    return res
-      .status(200)
-      .json({ url: `File uploaded successfully. ${hostLink}` });
+    // console.log(req.file.filename);
+    return res.status(200).json({
+      url: hostLink + "/uploads/" + req.file.filename,
+    });
   }
+});
+
+app.get("/uploads/:file", (req, res) => {
+  const filename = `./uploads/${req.params.file}`;
+  res.sendFile(filename, { root: __dirname });
+});
+
+app.delete("/delete/:filename", (req, res) => {
+  const filePath = `./uploads/${req.params.filename}`;
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.error("Error while deleting the file:", err);
+    } else {
+      res.status(200).send("file deleted successfully");
+    }
+  });
 });
 
 app.listen(port, () => console.log("listening", port));
