@@ -4,6 +4,8 @@ const cors = require("cors");
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 4000;
+const multer = require("multer");
+const path = require("path");
 
 app.use(cors());
 app.use(express.json());
@@ -16,6 +18,17 @@ const client = new MongoClient(process.env.URL, {
 
 client.connect();
 const collection = client.db("portfolio").collection("projects");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads"); // The folder where uploaded files will be stored.
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // Use the original file name for storage.
+  },
+});
+
+const upload = multer({ storage: storage });
 
 // to deploy ========>> vercel --prod
 
@@ -133,5 +146,17 @@ app.delete("/projects/:id", async (req, res) => {
 app.get("/", (req, res) =>
   res.send({ message: "Welcome to Project Management Server" })
 );
+
+app.post("/file", upload.single("file"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No file received." });
+  } else {
+    const hostLink = `${req.protocol}://${req.get("host")}`;
+
+    return res
+      .status(200)
+      .json({ url: `File uploaded successfully. ${hostLink}` });
+  }
+});
 
 app.listen(port, () => console.log("listening", port));
