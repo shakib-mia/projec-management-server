@@ -3,7 +3,7 @@ require("dotenv").config();
 const cors = require("cors");
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 5000;
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
@@ -12,7 +12,9 @@ const fs = require("fs");
 app.use(cors());
 app.use(express.json());
 
-const client = new MongoClient(process.env.URL, {
+const uri = `mongodb+srv://${process.env.PROJECT_NAME}:${process.env.PASSWORD}@cluster0.gvfpmor.mongodb.net/?retryWrites=true&w=majority`;
+
+const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
