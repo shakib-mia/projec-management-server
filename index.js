@@ -9,7 +9,10 @@ const path = require("path");
 const fs = require("fs");
 // const { error } = require("console");
 
-app.use(cors());
+app.use(cors({
+  origin:"*",
+  method:"*"
+}));
 app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.PROJECT_NAME}:${process.env.PASSWORD}@cluster0.gvfpmor.mongodb.net/?retryWrites=true&w=majority`;
